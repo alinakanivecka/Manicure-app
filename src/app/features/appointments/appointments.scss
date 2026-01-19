@@ -1,0 +1,343 @@
+.primary-btn {
+  color: white;
+  font-size: 15px;
+  padding: 5px 10px;
+  background-color: rgb(214, 141, 141);
+  border-radius: 15px;
+  border: none;
+  cursor: pointer;
+
+  &:hover {
+    background-color: rgb(207, 98, 98);
+  }
+}
+
+.add-btn {
+  font-size: 25px;
+}
+
+.modal-btn {
+  padding: 5px 20px;
+}
+
+.delete-btn {
+  background-color: white;
+  color: rgb(52, 52, 52);
+  padding: 5px 20px;
+  border: 1px solid rgb(197, 190, 190);
+  margin-right: auto;
+
+  &:hover {
+    background-color: rgb(230, 230, 230);
+  }
+}
+
+.cancel-btn {
+  background-color: white;
+  color: rgb(52, 52, 52);
+  padding: 5px 20px;
+  border: 1px solid rgb(197, 190, 190);
+
+  &:hover {
+    background-color: rgb(230, 230, 230);
+  }
+}
+
+.appointment-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  .header-title {
+    font-size: 25px;
+    font-weight: 600;
+  }
+}
+
+::-webkit-scrollbar {
+  width: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background: #fef0f0;
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb {
+  background-color: #efcdcd;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #d5bcbc;
+}
+
+.appointments-list {
+  display: flex;
+  flex-direction: column;
+  list-style: none;
+  gap: 15px;
+  margin: 0;
+  overflow-y: auto;
+  max-height: calc(100vh - 330px);
+  border-radius: 20px;
+  padding: 0 10px 0 0;
+
+  .appointments-row {
+    display: flex;
+    align-items: center;
+    border-radius: 20px;
+    background-color: white;
+    padding: 15px 25px;
+    gap: 20px;
+    cursor: pointer;
+
+    &:hover {
+      background-color: rgb(227 211 211);
+    }
+
+    .appointment-time {
+      font-size: 20px;
+      font-weight: 500;
+      border-right: 1px solid rgb(199, 190, 190);
+      padding: 15px 15px 15px 0;
+    }
+
+    .name-service__box {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+
+      .appointment-client {
+        font-size: 20px;
+        font-weight: 500;
+      }
+    }
+
+    .appointment-price {
+      margin-left: auto;
+      font-size: 18px;
+      font-weight: 400;
+      text-align: center;
+    }
+  }
+}
+
+.revenue {
+  text-align: center;
+  margin-top: 20px;
+
+  .income-info {
+    font-size: 15px;
+  }
+}
+
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  .modal-window {
+    display: flex;
+    flex-direction: column;
+    background-color: rgb(233 226 221);
+    border-radius: 20px;
+    padding: 20px;
+    position: relative;
+    min-width: 430px;
+    border: 4px solid rgb(214, 141, 141);
+
+    .modal__title {
+      margin: 0;
+      font-size: 25px;
+      font-weight: 600;
+    }
+
+    .close-btn {
+      position: absolute;
+      right: 20px;
+      top: 20px;
+      font-size: 23px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .appointment-form {
+      display: flex;
+      flex-direction: column;
+      margin-top: 20px;
+
+      .error-slot {
+        min-height: 18px;
+        margin-top: 4px;
+        margin-left: auto;
+
+        .erorr-text {
+          color: red;
+          font-size: 14px;
+        }
+      }
+
+      .input-label {
+        font-size: 17px;
+        margin-bottom: 4px;
+      }
+
+      .input-info {
+        border: 1px solid rgb(197, 190, 190);
+        border-radius: 10px;
+        padding: 13px;
+        cursor: pointer;
+        outline: none;
+      }
+
+      select {
+        appearance: none;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+
+        padding-right: 40px;
+
+        background-image: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23666' stroke-width='2' fill='none'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 16px center;
+      }
+    }
+
+    .btn-box {
+      display: flex;
+      justify-content: flex-end;
+      gap: 15px;
+      margin-top: 20px;
+    }
+  }
+}
+
+.modal-delete__title {
+  margin-bottom: 5px !important;
+}
+
+.input-error {
+  outline: 1px solid red;
+}
+
+.dates-strip-wrap {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background-color: rgb(249, 245, 245);
+  border-radius: 20px;
+  padding: 0 5px;
+  margin-bottom: 20px;
+}
+
+.arrow {
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  font-size: 24px;
+  line-height: 1;
+}
+
+.dates-strip {
+  flex: 1;
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  padding: 8px 4px;
+  scrollbar-width: none;
+  white-space: nowrap;
+  justify-content: flex-start;
+  border-radius: 20px;
+}
+
+.date-pill {
+  flex: 0 0 auto;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  text-align: center;
+  border-radius: 20px;
+  width: 55px;
+  height: 45px;
+  background-color: rgb(233, 226, 221);
+
+  &:hover {
+    background-color: rgb(214, 141, 141);
+    color: #fff;
+  }
+}
+
+.date-number {
+  display: grid;
+  place-items: center;
+  font-size: 12px;
+  font-weight: 500;
+  margin-top: 4px;
+}
+
+.date-weekday {
+  font-size: 11px;
+  opacity: 0.6;
+}
+
+.date-pill.active {
+  background-color: rgb(214, 141, 141);
+  color: #fff;
+  border-radius: 20px;
+  width: 55px;
+  height: 45px;
+}
+
+@media (max-width: 767px) {
+  .appointments-list {
+    .appointments-row {
+      padding: 15px 15px;
+      gap: 15px;
+
+      .name-service__box {
+        .appointment-client {
+          font-size: 18px;
+        }
+      }
+
+      .appointment-service {
+        font-size: 13px;
+      }
+
+      .appointment-time {
+        font-size: 17px;
+      }
+
+      .appointment-price {
+        font-size: 15px;
+      }
+    }
+  }
+
+  .date-pill {
+    width: 52px;
+  }
+
+  .modal-backdrop {
+    .modal-window {
+      min-width: 300px;
+
+      .modal__title,
+      .close-btn {
+        font-size: 20px;
+      }
+
+      .modal-btn,
+      .delete-btn,
+      .cancel-btn {
+        font-size: 15px;
+      }
+    }
+  }
+}

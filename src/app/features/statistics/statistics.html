@@ -1,0 +1,51 @@
+<section>
+  <header class="statistics-header">
+    <h1 class="header-title">Statistics</h1>
+    <div class="month-switch">
+     <div class="arrow-block">
+       <span class="arrow" (click)="prevMonth()">←</span>
+     </div>
+      <span class="month-name">{{monthTitle()}}</span>
+      <div class="arrow-block">
+        <span class="arrow" (click)="nextMonth()">→</span>
+      </div>
+    </div>
+  </header>
+
+  <div class="statistics-grid">
+    <div class="statistics-info">
+      <div class="amount appointment-color amount--with-icon">
+        <span class="material-symbols-outlined amount-icon">event</span>
+         <span class="amount-number">{{appointmentsAmount()}}</span>
+      </div>
+      <span class="statistics-name">Appointments</span>
+    </div>
+
+   <div class="statistics-info">
+      <div class="amount client-color amount--with-icon">
+        <span class="material-symbols-outlined amount-icon">group</span>
+         <span class="amount-number">{{monthlyClients()}}</span>
+      </div>
+      <span class="statistics-name">Clients</span>
+    </div>
+
+    <div class="statistics-info ">
+      <div class="amount revenue-color amount--with-icon">
+        <span class="material-symbols-outlined amount-icon">payments</span>
+        <span class="amount-number">{{ monthsRevenue() }}</span>
+        <span class="currency">HUF</span>
+      </div>
+      <span class="statistics-name">Month’s revenue</span>
+    </div>
+
+    
+   <div class="statistics-info">
+      <div class="amount work-days-color amount--with-icon">
+        <span class="material-symbols-outlined amount-icon">calendar_month</span>
+         <span class="amount-number">{{workDaysAmount()}}</span>
+      </div>
+      <span class="statistics-name">Work Days</span>
+    </div>
+
+  </div>
+</section>

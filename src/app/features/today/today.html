@@ -1,0 +1,23 @@
+<section>
+  <header>
+    <p class="header-title">Today`s appointments</p>
+  </header>
+  @if (todayAppointments().length > 0) {
+     <ul class="appointments-list">
+    @for (appointment of todayAppointments(); track appointment.id) {
+    @if (appointment.date === todayIso) {
+    <li class="appointments-row" >
+      <span class="appointment-time">{{appointment.time}}</span>
+      <div class="name-service__box">
+        <span class="appointment-client">{{getClientName(appointment.clientId)}}</span>
+        <span class="appointment-service">{{getServiceName(appointment.serviceId)}}</span>
+      </div>
+      <span class="appointment-price">{{appointment.price}} HUF</span>
+    </li>
+    }
+    }
+  </ul>
+  } @else {
+    <span class="no-appointments">There are no appointments today</span>
+  }
+</section>

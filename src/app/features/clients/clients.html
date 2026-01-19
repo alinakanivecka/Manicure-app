@@ -1,0 +1,160 @@
+<section class="clients-page">
+  <header class="client-header">
+    <h1 class="clients-title">Clients</h1>
+    <button type="button" class="primary-btn" (click)="openAddClient()">Add client</button>
+  </header>
+
+  <ul class="clients-list">
+    @if (filteredClients().length === 0) {
+    <div class="empty-state">
+      <span class="material-symbols-outlined empty-icon">group_off</span>
+      <p class="empty-title">No clients yet</p>
+      <p class="empty-subtitle">Add your first client to start working</p>
+    </div>
+    } @else {
+    @for (client of filteredClients(); track client.id) {
+    <li class="client-row" (click)="openHistoryClientModal(client)">
+      <div class="client-info">
+        <span class="client-name">{{client.name}}</span>
+        <span class="client-inst">{{client.instagram}}</span>
+      </div>
+      <div class="buttons-list">
+        <button type="button" class="icon-btn" (click)="openEditClient($event, client)">
+          <span class="material-symbols-outlined">edit</span>
+        </button>
+        <button type="button" class="icon-btn danger" (click)="openDeleteClient($event, client)">
+          <span class="material-symbols-outlined">delete</span>
+        </button>
+      </div>
+    </li>
+    }
+    }
+  </ul>
+
+  <div class="search">
+    <input class="search-input" type="text" placeholder="Search client..."
+      (input)="search.set($any($event.target).value)" [value]="search()">
+
+    @if (search().length) {
+    <button type="button" class="search-clear" (click)="search.set('')" aria-label="Clear"></button>
+    <span class="material-symbols-outlined">close</span>
+    }
+  </div>
+</section>
+
+@if (isHistoryClientOpen()) {
+<div class="modal-backdrop" (click)="closeHistoryModal()">
+  <div class="modal-window history-client__modal" (click)="$event.stopPropagation()">
+    <h1 class="modal__title history-modal-title">Client History</h1>
+    <span class="close-btn" (click)="closeHistoryModal()">X</span>
+    <div class="client-name">
+      <span>{{historyClient()?.name}}</span>
+    </div>
+    <div class="appointments-count">
+      <span class="material-symbols-outlined">calendar_month</span>
+      <span class="appointments-count__title">Number of appointments</span>
+      <span class="appointments-count__number">{{clientAppointmentsCount()}}</span>
+    </div>
+    <span class="appointment-list-title">Appointments</span>
+    <div class="card">
+    <ul class="history-appointments-list">
+      @if (clientAppointments().length === 0) {
+      <div class="empty-state">
+        <span class="material-symbols-outlined empty-icon">
+          event_busy
+        </span>
+        <p class="empty-title">No appointments yet</p>
+        <p class="empty-subtitle">
+          This client has no appointment history
+        </p>
+      </div>
+      } @else {
+      @for (a of clientAppointments(); track a.id) {
+      <li class="appointment-row">
+        <div class="appointment-description">
+          <span class="service-name">{{getServiceName(a.serviceId)}}</span>
+          <span>{{a.time}}</span>
+        </div>
+        <div class="appointment-description">
+          <span>{{a.price}}</span>
+          <span>{{formatDate(a.date)}}</span>
+        </div>
+      </li>
+      }
+      }
+    </ul>
+    </div>
+  </div>
+</div>
+}
+
+@if (modalWindowOpen()) {
+<div class="modal-backdrop" (click)="closeModal()">
+  <div class="modal-window modal-client__container" (click)="$event.stopPropagation()">
+    <h1 class="modal__title">
+      @if (!editingClient()) {
+      Add Client
+      } @else {
+      Edit Client — {{ editingClient()!.name }}
+      }
+    </h1>
+    <span (click)="closeModal()" class="close-btn">X</span>
+
+    @let showNameControlValidation = (nameCtrl?.hasError('required') ||
+    nameCtrl?.hasError('whitespace')) && (nameCtrl?.touched || nameCtrl?.dirty);
+
+    @let showInstagramControlValidation = (instagramCtrl?.hasError('required') ||
+    instagramCtrl?.hasError('whitespace')) && (instagramCtrl?.touched || instagramCtrl?.dirty);
+
+    <form class="form-info" [formGroup]="clientForm" (ngSubmit)="submitClientForm()">
+      <label for="name" class="input-label">Name</label>
+      <input class="input-info" id="name" type="text" formControlName="name"
+        [class.input-error]="showNameControlValidation">
+
+
+      <div class="error-slot">
+        @if (showNameControlValidation) {
+        <span class="erorr-text">
+          Name is required
+        </span>
+        }
+      </div>
+
+      <label class="input-label">Instagram</label>
+      <input class="input-info" id="instagram" type="text" formControlName="instagram" [class.input-error]="showInstagramControlValidation">
+
+      <div class="error-slot">
+        @if (showInstagramControlValidation) {
+        <span class="erorr-text">
+          Instagram is required
+        </span>
+        }
+      </div>
+
+      <div class="btn-box">
+        <button type="button" (click)="closeModal()" class="primary-btn cancel-btn">Cancel</button>
+        <button type="submit" class="primary-btn modal-btn">
+          @if (!editingClient()) {
+          Save
+          } @else {
+          Update
+          }
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+}
+
+@if (deleteModalOpen()) {
+<div class="modal-backdrop" (click)="closeDeletegModal()">
+  <div class="modal-window" (click)="$event.stopPropagation()">
+    <h1 class="modal__title modal-delete__title">Delete client — {{deletingClient()!.name}}?</h1>
+    <span (click)="closeDeletegModal()" class="close-btn">X</span>
+    <div class="btn-box">
+      <button type="button" class="primary-btn cancel-btn" (click)="closeDeletegModal()">Cancel</button>
+      <button type="button" class="primary-btn modal-btn" (click)="confirmDeleteClient()">Delete</button>
+    </div>
+  </div>
+</div>
+}

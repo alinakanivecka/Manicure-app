@@ -1,0 +1,169 @@
+<section>
+  <header class="appointment-header">
+    <h1 class="header-title">Appointment</h1>
+    <button type="button" class="primary-btn add-btn" (click)="openAddAppointment()">+</button>
+  </header>
+
+  <div class="dates-strip-wrap">
+    <button type="button" class="arrow left" (click)="scrollDates(-1)">‹</button>
+
+    <div class="dates-strip" #datesStrip>
+      @for (day of daysInSelectedMonth(); track day.iso) {
+      <button type="button" class="date-pill" (click)="selectDate(day.iso)" [class.active]="selectedDate() === day.iso"
+        [attr.data-iso]="day.iso">
+        <div class="date-weekday">{{ day.weekdayShort }}</div>
+        <div class="date-number">{{ day.label }}</div>
+      </button>
+      }
+    </div>
+
+    <button type="button" class="arrow right" (click)="scrollDates(1)">›</button>
+  </div>
+
+
+  <ul class="appointments-list">
+    @for (appointment of appointmentsForSelectedDate(); track appointment.id) {
+    @if (appointment.date === selectedDate()) {
+    <li class="appointments-row" (click)="openEditAppointment(appointment)">
+      <span class="appointment-time">{{appointment.time}}</span>
+      <div class="name-service__box">
+        <span class="appointment-client">{{getClientName(appointment.clientId)}}</span>
+        <span class="appointment-service">{{getServiceName(appointment.serviceId)}}</span>
+      </div>
+      <span class="appointment-price">{{appointment.price}} HUF</span>
+    </li>
+    }
+    }
+  </ul>
+  <div class="revenue">
+    <span class="income-info">Revenue: {{priceForADay()}} HUF</span>
+  </div>
+
+</section>
+
+@if (isModalWindowOpen() === true) {
+<div class="modal-backdrop" (click)="closeModal()">
+  <div class="modal-window" (click)="$event.stopPropagation()">
+    <h1 class="modal__title">
+      @if (!editingAppointment()) {
+      Add New Appointment
+      } @else {
+      Update Appointment
+      }
+    </h1>
+    <span (click)="closeModal()" class="close-btn">X</span>
+
+    @let showClientNameControlValidation = clientCtrl?.hasError('required') && (clientCtrl?.touched ||
+    clientCtrl?.dirty);
+    @let showServiceNameControlValidation = serviceCtrl?.hasError('required') && (serviceCtrl?.touched ||
+    serviceCtrl?.dirty);
+    @let showDateCtrlControlValidation = dateCtrl?.hasError('required') && (dateCtrl?.touched ||
+    dateCtrl?.dirty);
+    @let showTimeCtrlControlValidation = timeCtrl?.hasError('required') && (timeCtrl?.touched ||
+    timeCtrl?.dirty);
+    @let showPriceCtrlControlValidation = priceCtrl?.hasError('required') && (priceCtrl?.touched ||
+    priceCtrl?.dirty);
+
+    <form class="appointment-form" [formGroup]="appointmentForm" (ngSubmit)="submitAppointmentForm()">
+      <label class="input-label">Choose a client</label>
+      <select class="input-info" [formControl]="appointmentForm.controls.clientId"
+        [class.input-error]="showClientNameControlValidation">
+        @for (client of clients(); track client.id) {
+        <option [ngValue]="client.id">{{client.name}}</option>
+        }
+      </select>
+
+      <div class="error-slot">
+        @if (showClientNameControlValidation) {
+        <span class="erorr-text">
+          Client name is required
+        </span>
+        }
+      </div>
+
+      <label class="input-label">Choose a service</label>
+      <select class="input-info" [formControl]="appointmentForm.controls.serviceId"
+        [class.input-error]="showServiceNameControlValidation">
+        @for (service of services(); track service.id) {
+        <option [ngValue]="service.id">{{service.name}}</option>
+        }
+      </select>
+
+      <div class="error-slot">
+        @if (showServiceNameControlValidation) {
+        <span class="erorr-text">
+          Service name is required
+        </span>
+        }
+      </div>
+
+      <label class="input-label">Date</label>
+      <input type="date" [formControl]="appointmentForm.controls.date" class="input-info"
+        [class.input-error]="showDateCtrlControlValidation">
+
+      <div class="error-slot">
+        @if (showDateCtrlControlValidation) {
+        <span class="erorr-text">
+          Date is required
+        </span>
+        }
+      </div>
+
+      <label class="input-label">Time</label>
+      <input type="time" [formControl]="appointmentForm.controls.time" class="input-info"
+        [class.input-error]="showTimeCtrlControlValidation">
+
+      <div class="error-slot">
+        @if (showTimeCtrlControlValidation) {
+        <span class="erorr-text">
+          Time is required
+        </span>
+        }
+      </div>
+
+      <label class="input-label">Price</label>
+      <input type="number" [formControl]="appointmentForm.controls.price" class="input-info"
+        [class.input-error]="showPriceCtrlControlValidation">
+
+      <div class="error-slot">
+        @if (showPriceCtrlControlValidation) {
+        <span class="erorr-text">
+          Price is required
+        </span>
+        }
+        @if (priceCtrl?.hasError('min')) {
+        <span class="erorr-text">Price must be greater than 0</span>
+        }
+      </div>
+
+      <div class="btn-box">
+        @if (editingAppointment()) {
+        <button type="button" class="primary-btn delete-btn" (click)="openDeleteModalAppointment()">Delete</button>
+        }
+        <button (click)="closeModal()" class="primary-btn cancel-btn">Cancel</button>
+        <button type="submit" class="primary-btn modal-btn">
+          @if (!editingAppointment()) {
+          Save
+          } @else {
+          Update
+          }
+        </button>
+      </div>
+    </form>
+
+  </div>
+</div>
+}
+
+@if (deleteModalOpen()) {
+<div class="modal-backdrop" (click)="closeDeletegModal()">
+  <div class="modal-window" (click)="$event.stopPropagation()">
+    <h1 class="modal__title modal-delete__title">Delete appointment?</h1>
+    <span (click)="closeDeletegModal()" class="close-btn">X</span>
+    <div class="btn-box">
+      <button type="button" class="primary-btn cancel-btn" (click)="closeDeletegModal()">Cancel</button>
+      <button type="button" class="primary-btn modal-btn" (click)="confirmDeleteAppointment()">Delete</button>
+    </div>
+  </div>
+</div>
+}

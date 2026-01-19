@@ -1,0 +1,17 @@
+<div class="clients-app">
+  <header class="clients-app__header">
+    <h1 class="header__title">Nails App</h1>
+  </header>
+
+  <nav class="nav-tabs">
+    <a routerLink="/today" routerLinkActive="tab-active" class="tab-link" >Today</a>
+    <a routerLink="/appointments" routerLinkActive="tab-active" class="tab-link">Appointments</a>
+    <a routerLink="/clients" routerLinkActive="tab-active" class="tab-link">Clients</a>
+    <a routerLink="/services" routerLinkActive="tab-active" class="tab-link">Services</a>
+    <a routerLink="/statistics" routerLinkActive="tab-active" class="tab-link">Statistics</a>
+  </nav>
+
+  <main class="main-content">
+    <router-outlet></router-outlet>
+  </main>
+</div>

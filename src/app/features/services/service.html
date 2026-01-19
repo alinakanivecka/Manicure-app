@@ -1,0 +1,114 @@
+<section>
+  <header class="services-header">
+    <h1 class="services-title">Services</h1>
+    <button type="button" class="primary-btn" (click)="openAddService()">Add service</button>
+  </header>
+
+  <div class="card">
+  <ul class="services-list">
+    @if (services().length === 0) {
+    <div class="empty-state">
+      <span class="material-symbols-outlined empty-icon">design_services</span>
+      <p class="empty-title">No services yet</p>
+      <p class="empty-subtitle">
+        Add your first service to start creating appointments
+      </p>
+    </div>
+    } @else {
+    @for (service of services(); track service.id) {
+    <li class="services-box">
+      <div class="services-info">
+        <span class="service-name">{{service.name}}</span>
+        <span class="service-inst">{{service.price}} HUF</span>
+      </div>
+      <div class="buttons-list">
+        <button type="button" class="icon-btn" (click)="openEditService(service)">
+          <span class="material-symbols-outlined">edit</span>
+        </button>
+        <button type="button" class="icon-btn danger" (click)="openDeleteService(service)">
+          <span class="material-symbols-outlined">delete</span>
+        </button>
+      </div>
+    </li>
+    }
+    }
+
+  </ul>
+  </div>
+</section>
+
+@if (isServiceModalOpen() === true) {
+<div class="modal-backdrop" (click)="closeModal()">
+  <div class="modal-window" (click)="$event.stopPropagation()">
+    <h1 class="modal__title">
+      @if (!editingService()) {
+      Add Service
+      } @else {
+      Edit Service — <br>{{ editingService()!.name }}
+      }
+    </h1>
+    <span (click)="closeModal()" class="close-btn">X</span>
+
+    @let showServiceNameControlValidation = (serviceNameCtrl?.hasError('required') ||
+    serviceNameCtrl?.hasError('whitespace')) && (serviceNameCtrl?.touched ||
+    serviceNameCtrl?.dirty|| isSubmitted);
+
+    @let showPriceControlValidation = priceCtrl?.hasError('required') && (priceCtrl?.touched || priceCtrl?.dirty ||
+    isSubmitted);
+
+    <form class="form-info" [formGroup]="serviceForm" (ngSubmit)="submitServiceForm()">
+      <label for="name" class="input-label">Service name</label>
+      <input class="input-info" id="name" type="text" formControlName="serviceName"
+        [class.input-error]="showServiceNameControlValidation">
+
+
+      <div class="error-slot">
+        @if (showServiceNameControlValidation) {
+        <span class="erorr-text">
+          Service name is required
+        </span>
+        }
+      </div>
+
+      <label class="input-label">Price</label>
+      <input class="input-info" id="price" type="number" formControlName="price"
+        [class.input-error]="showPriceControlValidation">
+
+      <div class="error-slot">
+        @if (showPriceControlValidation) {
+        <span class="erorr-text">
+          Price is required
+        </span>
+        } @if (priceCtrl?.hasError('min')) {
+        <span class="erorr-text">Price must be greater than 0</span>
+        }
+
+      </div>
+
+      <div class="btn-box">
+        <button type="button" (click)="closeModal()" class="primary-btn cancel-btn">Cancel</button>
+        <button type="submit" class="primary-btn modal-btn">
+          @if (!editingService()) {
+          Save
+          } @else {
+          Update
+          }
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+}
+
+@if (deleteModalOpen()) {
+<div class="modal-backdrop" (click)="closeDeletegModal()">
+  <div class="modal-window" (click)="$event.stopPropagation()">
+    <h1 class="modal__title modal-delete__title">Delete service — <br>{{deletingService()!.name}}?</h1>
+    <span (click)="closeDeletegModal()" class="close-btn">X</span>
+    <div class="btn-box">
+      <button type="button" class="primary-btn cancel-btn" (click)="closeDeletegModal()">Cancel</button>
+      <button type="button" class="primary-btn modal-btn" (click)="confirmDeleteService()">Delete</button>
+    </div>
+  </div>
+</div>
+}
